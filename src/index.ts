@@ -1,3 +1,3 @@
-import {sketch} from './sketches/Gravity'
+import {sketch} from './sketches/GravityII'
 
 sketch
