@@ -11,8 +11,9 @@ export const sketch = new p5((p: p5) => {
         canvas.parent("p5");
         p1.postion = p.createVector(100, 200)
         p1.color = p.color("blue")
+        // p1.mass *= 10
         p1.EffectedBy.push(p2, p3)
-        p1.ApplyForce(p.createVector(500, 0))
+        p1.ApplyForce(p.createVector(400, -100))
 
         p2.postion = p.createVector(p.width / 2, p.height / 2)
         p2.color = p.color("yellow")
@@ -21,9 +22,9 @@ export const sketch = new p5((p: p5) => {
 
         p3.postion = p.createVector((p.width / 2) + 200, (p.height / 2) + 300)
         p3.color = p.color("red")
-        p3.mass *= 10
+        // p3.mass *= 10
         p3.EffectedBy.push(p1, p2)
-        p3.ApplyForce(p.createVector(-1500, -1000))
+        p3.ApplyForce(p.createVector(-150, 150))
         
 
         for (const planet of objects) {
@@ -36,6 +37,8 @@ export const sketch = new p5((p: p5) => {
 
     p.draw = () => {
         p.background(200)
+        p.point(p.width/2, p.height/2)
+    
         for (const planet of objects) {
             planet.GetGravAcc();
         }
