@@ -14,7 +14,7 @@ export const sketch = new p5((p: p5)=> {
     
     p.draw = () => {
         p.background(200);
-        walker.ApplyForce(createVector(p.random(-0.1,0.1),p.random(-0.1,0.1)).limit(1))
+        walker.ApplyForce(createVector(p.random(-10,10),p.random(-10,10)))
         walker.Update();
         // p.circle(p.random(p.width, 20 ), 100, 20)
         walker.Draw();
