@@ -23,6 +23,9 @@ export default class Walker {
         this.mass = size * 5;
     }
 
+    public setPostion(x: number, y: number) { this.postion = this.p.createVector(x, y) }
+    public setVelocity(x: number, y: number) { this.velocity = this.p.createVector(x, y) }
+
     public Update() {
         this.velocity.add(this.acceleration)
         this.PastEdge();
