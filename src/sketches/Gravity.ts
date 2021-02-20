@@ -16,15 +16,15 @@ export const sketch = new p5((p: p5) => {
 
         p2.postion = p.createVector(p.width / 2, p.height / 2)
         p2.color = p.color("yellow")
-        p2.EffectedBy.push(p1, p3)
         p2.mass *= 10
+        p2.EffectedBy.push(p1, p3)
 
         p3.postion = p.createVector((p.width / 2) + 200, (p.height / 2) + 300)
         p3.color = p.color("red")
-        p3.EffectedBy.push(p1, p2)
         p3.mass *= 10
+        p3.EffectedBy.push(p1, p2)
         p3.ApplyForce(p.createVector(-1500, -1000))
-
+        
 
         for (const planet of objects) {
             // planet()
