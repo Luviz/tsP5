@@ -1,7 +1,7 @@
 import { Vector } from "p5";
 import Walker from "./Walker";
 
-export default class Plant extends Walker {
+export default class Planet extends Walker {
     public EffectedBy: Walker[] = [];
 
     PastEdge(){
