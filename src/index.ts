@@ -1,3 +1,3 @@
-import {sketch} from './sketches/RandomAcc'
+import {sketch} from './sketches/Gravity'
 
 sketch

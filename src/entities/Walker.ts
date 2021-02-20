@@ -26,7 +26,7 @@ export default class Walker {
     public Update() {
         this.velocity.add(this.acceleration)
         this.PastEdge();
-        this.acceleration = this.p.createVector(0,0);
+        this.acceleration = this.p.createVector(0, 0);
         this.postion.add(this.velocity);
     }
 
@@ -54,7 +54,7 @@ export default class Walker {
         return Math.sqrt(2 * energy / this.mass)
     }
 
-    private PastEdge() {
+    protected PastEdge() {
         const elasticity = 0.75;
         const r = this.size * 0.5;
         const w = this.p.width - r, h = this.p.height - r;
