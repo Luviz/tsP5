@@ -1,5 +1,6 @@
 import * as p5 from "p5";
 import Planet from "../entities/Planet";
+import { drawArrow } from "../entities/Utilities";
 
 export const sketch = new p5((p: p5) => {
     const objects: Planet[] = [];
@@ -48,29 +49,20 @@ export const sketch = new p5((p: p5) => {
         }
     }
     let a = 1000
+    let mouseTrace: p5.Vector[] = []
     p.draw = () => {
         p.background(200);
         p.translate(canvCenter.x, canvCenter.y)
-
-        const screenCenter = p.createVector(p.width / 2, p.height / 2)
-        const newZero = canvCenter.copy().mult(-1)//.add(p.width/2,p.height/2) 
-        const newCenter = p5.Vector.add(newZero, screenCenter);
         const mouseVector = p.createVector(p.mouseX, p.mouseY);
+
         if (p.mouseIsPressed) {
-            canvCenter.add(mouseVector.copy().sub(canvCenter).limit(10))
+            mouseTrace.push(mouseVector);
+            const deltaMouse = mouseTrace[mouseTrace.length-1].copy().sub(mouseTrace[mouseTrace.length-2])
+            canvCenter.add(deltaMouse.copy().limit(50))
+            // canvCenter.add(newCenter.copy().mult(-1).limit(5));
+        } else {
+            mouseTrace = []
         }
-        p.fill("green")
-        p.circle(newZero.x, newZero.y, 60);
-        p.fill("black")
-        p.circle(newCenter.x, newCenter.y, 20);
-        drawArrow(newZero, newCenter, "blue");
-        drawArrow(newZero, canvCenter, "blue");
-        drawArrow(newZero, mouseVector, "blue");
-        drawArrow(newZero.copy().add(canvCenter), mouseVector.copy().sub(canvCenter), "red");
-        drawArrow(newZero.copy().add(canvCenter), mouseVector.copy().sub(canvCenter), "red");
-
-        // drawArrow(vwh, canvCenter, "black");
-
 
         for (const obj of objects) {
             obj.GetGravAcc();
@@ -84,23 +76,11 @@ export const sketch = new p5((p: p5) => {
         // p.fill("red");
         // p.circle(vwh.x, vwh.y, 20);
         // p.circle(canvCenter.x - p.width / 2, canvCenter.y - p.height / 2, 10);
-        // p.circle(0, 0, 5);
+        // p.circle(0, 0, 50);
     }
 
 
 
-    function drawArrow(base: p5.Vector, vec: p5.Vector, myColor: string) {
-        p.push();
-        p.stroke(myColor);
-        p.strokeWeight(3);
-        p.fill(myColor);
-        p.translate(base.x, base.y);
-        p.line(0, 0, vec.x, vec.y);
-        p.rotate(vec.heading());
-        let arrowSize = 7;
-        p.translate(vec.mag() - arrowSize, 0);
-        p.triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
-        p.pop();
-    }
+    
 
 })
