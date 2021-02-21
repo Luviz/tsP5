@@ -1,12 +1,10 @@
 import * as p5 from "p5";
 import Planet from "../entities/Planet";
-import { DrawArrow } from "../entities/Utilities";
 
 export const sketch = new p5((p: p5) => {
     const objects: Planet[] = [];
-    let transX: number, transY: number;
+    let mouseTrace: p5.Vector[] = []
     const canvCenter = p.createVector(0, 0)
-    const vwh = p.createVector(p.width / 2, p.height / 2);
 
     function createPlant(color: string, size: number) {
         const planet = new Planet(p, p.createVector(0), size)
@@ -38,7 +36,7 @@ export const sketch = new p5((p: p5) => {
         p4.setPostion(0, -500);
         p4.ApplyForce(p.createVector(-initFvalue, 0))
 
-        const p5 = createPlant("orange", 10);
+        const p5 = createPlant("brown", 20);
         p5.setPostion(-500, 0);
         p5.ApplyForce(p.createVector(0, initFvalue))
 
@@ -48,8 +46,7 @@ export const sketch = new p5((p: p5) => {
             obj.EffectedBy.push(...objects.filter(o => obj !== o))
         }
     }
-    let a = 1000
-    let mouseTrace: p5.Vector[] = []
+
     p.draw = () => {
         p.background(200);
         p.translate(canvCenter.x, canvCenter.y)
@@ -73,14 +70,5 @@ export const sketch = new p5((p: p5) => {
             o.Draw();
         }
 
-        // p.fill("red");
-        // p.circle(vwh.x, vwh.y, 20);
-        // p.circle(canvCenter.x - p.width / 2, canvCenter.y - p.height / 2, 10);
-        // p.circle(0, 0, 50);
     }
-
-
-
-    
-
-})
+});
