@@ -1,6 +1,6 @@
 import * as p5 from "p5";
 import Planet from "../entities/Planet";
-import { drawArrow } from "../entities/Utilities";
+import { DrawArrow } from "../entities/Utilities";
 
 export const sketch = new p5((p: p5) => {
     const objects: Planet[] = [];
