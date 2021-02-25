@@ -14,13 +14,13 @@ export const sketch = new p5((p: p5) => {
         document.body.appendChild(h2);
         // p.noStroke();
         p.background(0);
-        for (let a = 0; a < 400; a++) {
+        for (let a = 0; a < 800; a++) {
             const partical = new Particle(p);
             partical.postion = createVector(0, 0);
             const x = p.random(p.width), y = p.random(p.height)
             // w1.postion = p5.Vector.random2D();
             partical.postion = createVector(x, y)
-            partical.color = p.color(255, 50);
+            partical.color = p.color(255, 5);
             arr.push(partical);
         }
     }
