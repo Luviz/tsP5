@@ -13,11 +13,10 @@ export const sketch = new p5((p: p5) => {
         canvas.parent("p5");
         document.body.appendChild(h2);
         p.pixelDensity(1)
-
+        p.frameRate(1);
     }
 
-    let z = 0
-    let itter = 0
+    let itter = 128
     p.draw = () => {
         p.background(0);
         p.loadPixels()
@@ -38,7 +37,7 @@ export const sketch = new p5((p: p5) => {
                     _realComp = rc + cr
                     _imagComp = ic + ci 
                     if (rc > itter) {
-                        const alpha = p.map(n/itter, 0, 1, 0, 255);
+                        const alpha = p.map(Math.sqrt(n/itter), 0, 1, 0, 255);
                         color.setAlpha(alpha)
                         break;
                     }
@@ -49,16 +48,15 @@ export const sketch = new p5((p: p5) => {
 
             }
         }
-        if (itter < 100) {
-            itter += 2 
-            // p.saveCanvas(`mandel-${itter}`,"png")
+        if (itter < 255) {
+            itter += itter 
+            console.log(itter)
         } else {
-            p.noLoop()
         }
+        p.noLoop()
 
 
         p.updatePixels()
-        // p.updatePixels()
         h2.innerText = `fps: ${Math.floor(p.frameRate()).toString()} `;
         h2.innerText += `\n z: ${itter} `;
     }
