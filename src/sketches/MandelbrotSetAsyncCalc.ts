@@ -1,6 +1,7 @@
 // import * as p from "p5";
 
 export declare let matrix: any[][];
+export declare let window: any;
 
 function map(n: number, start1: number, stop1: number, start2: number, stop2: number, withinBounds?: boolean) {
     return ((n-start1)/(stop1-start1))*(stop2-start2)+start2;
@@ -15,7 +16,7 @@ function colorRGB(red: number, blue: number, green: number) {
 }
 
 
-export async function BuildMandArr(width = 600, height = 600, range = 0.02, offReal = -1.13, offImg=0.21) {
+export async function BuildMandArr(width = 600, height = 600, range = 2.00, offReal = -1.13, offImg=0.21) {
     // await "aa";
     matrix = [[]];
     for (let y = 0; y < height; y++) {
@@ -29,7 +30,31 @@ export async function BuildMandArr(width = 600, height = 600, range = 0.02, offR
     }
 }
 
-export function GetPixColor(realComp: number, imagComp: number, itter = 128*2) {
+
+const colorFrom = (value: number, lim: number) => {
+    if (window['valMax'] < value){
+        window['valMax'] = value 
+    }else {
+        window['valMax'] = 0 
+    }
+    const v = map(value, 0, lim, 0, 0x00ffff);
+    if (v < 0xff) {
+        return [0x00, 0x00, v]
+    }
+    else if (v < 0xff00) {
+        return [0, v >> 8, 0xff]
+    }else if (v < 0xffff){
+        console.log("a")
+        return [0, 0xff, v << 8]
+    }else if (v < 0xffff00){
+        return [0, 0xff, v << 8]
+    }
+    else {
+        return [0xff, 0xff, 0xff]
+    }
+}
+
+export function GetPixColor(realComp: number, imagComp: number, itter = 0xff) {
     let cr = realComp
     let ci = imagComp
     let color = colorA(100);
@@ -44,20 +69,21 @@ export function GetPixColor(realComp: number, imagComp: number, itter = 128*2) {
             const frac = 255 / 5
             // console.log({y,x, alpha, rd});
             // color = color(alpha - frac, alpha - frac * 2, alpha - frac * 3)
-            if (alpha < frac) {
-                color = colorRGB(alpha, 0, 0)            // R
-            } else if (alpha < frac * 2) {
-                color = colorRGB(alpha, alpha - frac, 0) // R G
-            } else if (alpha < frac * 3) {
-                color = colorRGB(0, alpha, 0)            // G
-            } else if (alpha < frac * 4) {
-                color = colorRGB(0, alpha, alpha - frac) // G B
-            } else if (alpha < frac * 5) {
-                color = colorRGB(0, 0, alpha)            // B
-            } else {
-                color = colorA(100)
-                console.log(alpha)
-            }
+            // if (alpha < frac) {
+            //     color = colorRGB(alpha, 0, 0)            // R
+            // } else if (alpha < frac * 2) {
+            //     color = colorRGB(alpha, alpha - frac, 0) // R G
+            // } else if (alpha < frac * 3) {
+            //     color = colorRGB(0, alpha, 0)            // G
+            // } else if (alpha < frac * 4) {
+            //     color = colorRGB(0, alpha, alpha - frac) // G B
+            // } else if (alpha < frac * 5) {
+            //     color = colorRGB(0, 0, alpha)            // B
+            // } else {
+            //     color = colorA(100)
+            //     console.log(alpha)
+            // }
+            color = colorFrom(alpha, 255);
             break;
         } else {
             color = colorA(0) // INFI
