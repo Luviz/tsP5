@@ -72,7 +72,6 @@ export function GetPixColor(realComp: number, imagComp: number, itter = 0xff*2.5
         imagComp = ic + ci
         if (rc > itter) {
             const alpha = map(Math.sqrt(n / itter), 0, 1, 0, 255);
-            const frac = 255 / 5
             color = colorFrom(alpha, itter);
             break;
         } else {

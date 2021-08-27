@@ -1,6 +1,7 @@
 import { traceValue } from "../entities/Utilities";
+// import { matrix } from "./MandelbrotSetAsyncCalc";
 
-export declare let matrix: any[][];
+declare let window: any;
 
 function map(n: number, start1: number, stop1: number, start2: number, stop2: number, withinBounds?: boolean) {
     return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
@@ -22,6 +23,31 @@ export default class Mandelbrot {
     private _off_imag: number;
     private _itter: number;
 
+    constructor(height: number, width: number, range:number) {
+        this._height = height;
+        this._width = width;
+        this._range = range;
+        this._off_real = 0;
+        this._off_imag = 0;
+    }
+
+    public setOffSet(real:number, imag:number){
+        this._off_real = real;
+        this._off_imag = imag;
+    }
+
+    public setItter = (val: number) => {
+        this._itter = val;
+    }
+
+    public panLeft = (val: number) => {
+        this._off_real -= val;
+    }
+
+    public panUp = (val: number) => {
+        this._off_imag += val;
+    }
+
     private _getRange() {
         return [
             this._range + this._off_real,
@@ -29,54 +55,56 @@ export default class Mandelbrot {
         ]
     }
 
+    private _getiRange() {
+        return [
+            -this._range + this._off_real,
+            -this._range + this._off_imag,
+        ]
+    }
+
     render = () => {
-        matrix = [[]];
+        const matrix: any[][] = [[]];
         const { _height, _width, _range } = this;
         const [rangeX, rangeY] = this._getRange();
+        const [irangeX, irangeY] = this._getiRange();
         for (let y = 0; y < _height; y++) {
             if (!matrix[y]) matrix[y] = [];
             for (let x = 0; x < _width; x++) {
-                let realComp = map(x, 0, _width, -rangeX, rangeX);
-                let imagComp = map(y, 0, _height, -rangeY, rangeY);
-
+                let realComp = map(x, 0, _width, irangeX, rangeX);
+                let imagComp = map(y, 0, _height, irangeY, rangeY);
                 matrix[y][x] = this.GetPixColor(realComp, imagComp)
             }
         }
+        return matrix
     }
 
-    /*
-    0    0 black
-    1    1-256 red
-    2    256-512 yellow (red + green)
-    3    512-756 green (yellow - red)
-    4    756-1024 cyan (green + blue)
-    5    1024-1280 blue (cyan - green)
-    6    1280-1536 prupurl (blue + red)
-    7    1280-1536 white (blue + red)
-    */
-    /*
-     0 - black   
-                (0, 0, v)
-     1 - blue    
-                (0, v-f*1, v)
-     2 - cyan
-     3 - green
-     4 - yellow
-     5 - red 
-     6 - white
-    */
-
     colorFrom = (value: number, lim: number) => {
-        const v = map(value, 0, lim, 0, 0xffffff);
-        if (v < 0xff) {
-            return [0x00, 0x00, v]
+        const getGrey = (start: number, end: number, pos: number) => start + pos * (end - start);
+
+        const procent = map(value, 0, lim, 0, 1);
+
+        const gry = (p = procent) => getGrey(0x00, 0xff, p / (1 / 6));
+        const igry = (p = procent) => getGrey(0xff, 0x00, p / (1 / 6));
+
+        if (procent <= 1 / 6) {
+            return [0, 0, gry()];
+        } else if (procent > 1 / 6 && procent <= 2 / 6) {
+            return [0x00, gry(procent - 1 / 6), 0xff];
         }
-        else if (v < 0xff00) {
-            return [0, v >> 8, 0xff]
+        else if (procent > 2 / 6 && procent <= 3 / 6) {
+            return [0x00, 0xff, igry(procent - 2 / 6)]
         }
-        else {
-            return [0xff, 0xff, 0xff]
+        else if (procent > 3 / 6 && procent <= 4 / 6) {
+            return [gry(procent - 3 / 6), 0xff, 0]
         }
+        else if (procent > 4 / 6 && procent <= 5 / 6) {
+            return [0xff, igry(procent - 4 / 6), 0]
+        }
+        else if (procent > 5 / 6 && procent <= 6 / 6) {
+            return [0xff, gry(procent - 5 / 6), gry(procent - 5 / 6)]
+        }
+
+        return [0xff, 0xff, 0xff];
     }
 
     GetPixColor = (realComp: number, imagComp: number, itter = this._itter) => {
@@ -91,24 +119,10 @@ export default class Mandelbrot {
             imagComp = ic + ci
             if (rc > itter) {
                 const alpha = map(Math.sqrt(n / itter), 0, 1, 0, 255);
-                const frac = 255 / 5
-                if (alpha < frac) {
-                    color = colorRGB(alpha, 0, 0)            // R
-                } else if (alpha < frac * 2) {
-                    color = colorRGB(alpha, alpha - frac, 0) // R G
-                } else if (alpha < frac * 3) {
-                    color = colorRGB(0, alpha, 0)            // G
-                } else if (alpha < frac * 4) {
-                    color = colorRGB(0, alpha, alpha - frac) // G B
-                } else if (alpha < frac * 5) {
-                    color = colorRGB(0, 0, alpha)            // B
-                } else {
-                    color = colorA(100)
-                    console.log(alpha)
-                }
+                color = this.colorFrom(alpha, itter);
                 break;
             } else {
-                color = colorA(0) // INFI
+                color = [0, 0, 0]
             }
         }
         return color
