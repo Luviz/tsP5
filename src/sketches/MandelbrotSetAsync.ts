@@ -26,7 +26,7 @@ export const sketch = new p5((p: p5) => {
         //     await BuildMandArr().then(a => console.log("DONE!"));
         //     console.log("ASYNC BAR");
         //     console.timeLog("async")
-            
+
         // });
         // setTimeout(async () => await BuildMandArr().then(a => console.log("DONE!")), 1000)
         console.timeLog("init")
@@ -43,7 +43,7 @@ export const sketch = new p5((p: p5) => {
         const range = 2
         // p.noLoop()
         if (_matrix){
-            for (const iy in matrix) {
+            for (let iy = p.frameCount % 60 ; iy < matrix.length; iy += (60)) {
                 for (const ix in matrix[iy]) {
                     if (matrix[iy][ix]) {
                         const y = Number(iy);
