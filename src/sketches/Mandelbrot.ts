@@ -48,6 +48,10 @@ export default class Mandelbrot {
         this._off_imag += val;
     }
 
+    public setRange(range:number) {
+        this._range = range;
+    }
+
     private _getRange() {
         return [
             this._range + this._off_real,

@@ -10,7 +10,7 @@ window.matrix = [[]]
 
 sketch
 const mb = new Mandelbrot(600, 600, 0.00011);
-mb.setItter(512);
+mb.setItter(500);
 mb.setOffSet(-0.00017999999999999998, 0.7468996000000003)
 
 window.mb = mb;
@@ -34,6 +34,11 @@ window.panUp = (n: number) => {
 
 window.panDown = (n: number) => {
     mb.panUp(-n);
+    window.matrix = mb.render();
+}
+
+window.setRange= (n:number) => {
+    mb.setRange(n);
     window.matrix = mb.render();
 }
 // console.timeLog("index");
