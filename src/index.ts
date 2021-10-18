@@ -41,13 +41,5 @@ window.setRange= (n:number) => {
     mb.setRange(n);
     window.matrix = mb.render();
 }
-// console.timeLog("index");
-// (window as any).matrix = [];
-// console.timeLog("index");
-// window.BuildMandArr = BuildMandArr;
-// BuildMandArr(600, 600, 0.00021, -1.1455);
-// console.timeLog("index");
-// console.log(window.matrix)
+
 window.matrix = mb.render();
-// console.log(a)
-// console.timeLog("index");
